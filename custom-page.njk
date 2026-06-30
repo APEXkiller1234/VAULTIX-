@@ -1,0 +1,31 @@
+{#
+  To show different content based on the custom page, you can use the following code snippet.
+  Replace 'about-us' and 'contact' with the actual paths of your custom pages defined in the Visual Editor.
+
+  {% if custom_page.path == 'about-us' %}
+    Your code here
+  {% elif custom_page.path == 'contact' %}
+    Your code here
+  {% else %}
+    Default code here
+  {% endif %}
+#}
+
+<div class="container mx-auto">
+  <div class="py-32 relative mb-8">
+    <div class="m-auto absolute inset-0 -z-10 aspect-square rounded-full blur-[200px] bg-accent-500/50 max-w-4xl -translate-y-1/2 w-[65%]" aria-hidden="true"></div>
+    <div class="container mx-auto relative">
+      <div class="mx-auto max-w-md text-center">
+        <h1 class="text-5xl !leading-[1.125] font-bold text-t-primary mb-4">
+          {{ custom_page.name }}
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="components">
+  {% for componentId in components_order %}
+    {% render_component componentId %}
+  {% endfor %}
+</div>

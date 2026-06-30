@@ -1,0 +1,89 @@
+<a
+  class="premium-product-card reveal-on-scroll block h-full bg-card/75 border border-white/5 text-t-primary group active:scale-[0.99]"
+  href="{{ 'javascript:void(0);' if product.type == 'group' else ( ('/product/' + product.path) | shopUrl ) }}"
+  @click="{{ 'openGroupModal(' ~ product.id ~ ')' if product.type == 'group' else '' }}"
+>
+  <div class="premium-product-card__inner h-full transform transition-all duration-300 ease-out group-hover:bg-white/[0.025]">
+    <div class="text-center px-4 py-2 border-b border-white/5">
+      <h3 class="text-lg font-bold truncate">
+        {{ product.name }}
+      </h3>
+      {% if product.product_badges and product.product_badges.card and product.product_badges.card|length > 0 %}
+        <div class="badges flex items-center justify-center gap-2 flex-wrap mt-1">
+          {% for productBadge in product.product_badges.card %}
+            <div class="flex items-center gap-2 bg-accent-500 text-t-accent text-xs font-semibold px-2 py-1" style="background-color: {{ productBadge.color }}" data-text="{{ productBadge.label }}" data-color="{{ productBadge.color }}">
+              {% if productBadge.icon %}
+                <i class="{{ productBadge.icon }} fa-fw"></i>
+              {% endif %}
+              {{ productBadge.label }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="premium-product-card__media relative overflow-hidden p-2 mb-4 border-b border-white/5">
+      {% if product.image_urls and product.image_urls|length > 0 %}
+      <img src="{{ product.image_urls[0] }}" class="premium-product-card__image galaxy-showcase-rotate w-full {{ 'aspect-group-card-image object-group-image' if product.type == 'group' else 'aspect-product-card-image object-product-image' }}" loading="lazy" />
+      {% elif product.image_url %}
+      <img src="{{ product.image_url }}" class="premium-product-card__image galaxy-showcase-rotate w-full {{ 'aspect-group-card-image object-group-image' if product.type == 'group' else 'aspect-product-card-image object-product-image' }}" loading="lazy" />
+      {% else %}
+      <div class="flex justify-center items-center text-accent-400 {{ 'aspect-group-card-image' if product.type == 'group' else 'aspect-product-card-image' }}">
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-24" viewBox="0 0 256 256">
+          <path
+            fill="currentColor"
+            d="m222.72 67.91l-88-48.18a13.9 13.9 0 0 0-13.44 0l-88 48.18A14 14 0 0 0 26 80.18v95.64a14 14 0 0 0 7.28 12.27l88 48.18a13.92 13.92 0 0 0 13.44 0l88-48.18a14 14 0 0 0 7.28-12.27V80.18a14 14 0 0 0-7.28-12.27ZM127 30.25a2 2 0 0 1 1.92 0L212.51 76l-33.94 18.57l-84.52-46.26ZM122 223l-83-45.43a2 2 0 0 1-1-1.75V86.66l84 46ZM43.49 76l38.07-20.85l84.51 46.26L128 122.24ZM218 175.82a2 2 0 0 1-1 1.75L134 223v-90.36l36-19.71V152a6 6 0 0 0 12 0v-45.63l36-19.71Z"
+          />
+        </svg>
+      </div>
+      {% endif %}
+
+      <div class="premium-product-card__overlay" aria-hidden="true">
+        <div class="premium-product-card__overlay-pill">
+          <i class="fa fa-magnifying-glass"></i>
+          <span>View Details</span>
+        </div>
+      </div>
+    </div>
+    <div class="premium-product-card__body text-left px-4 pb-4">
+      <div class="flex items-center justify-between gap-2 truncate mb-4">
+        <p class="premium-product-card__price text-base font-semibold text-t-primary/50 truncate">
+          <span class="text-accent-500">
+            {% if product.min_price != product.max_price %}
+              <span x-text="appCurrency.format({{ product.min_price }}, '{{ product.currency }}')">
+                {{ formatPrice(product.min_price, product.currency) }}
+              </span>
+              -
+              <span x-text="appCurrency.format({{ product.max_price }}, '{{ product.currency }}')">
+                {{ formatPrice(product.max_price, product.currency) }}
+              </span>
+            {% elif product.min_price %}
+              <span x-text="appCurrency.format({{ product.min_price }}, '{{ product.currency }}')">
+                {{ formatPrice(product.min_price, product.currency) }}
+              </span>
+            {% else %}
+              -
+            {% endif %}
+          </span>
+        </p>
+        <p class="premium-product-card__stock text-base text-t-primary/50">
+          {% if product.type == 'group' %}
+            {{ product.products | length }} Products
+          {% else %}
+            {% if product.stock === 0 %}
+              Out of Stock
+            {% elif product.hide_stock_count %}
+              In Stock
+            {% elif product.stock === -1 %}
+              <span class="inline-flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="text-accent-500 size-4" fill="currentColor" viewBox="0 0 256 256"><path d="M248,128a56,56,0,0,1-95.6,39.6l-.33-.35L92.12,99.55a40,40,0,1,0,0,56.9l8.52-9.62a8,8,0,1,1,12,10.61l-8.69,9.81-.33.35a56,56,0,1,1,0-79.2l.33.35,59.95,67.7a40,40,0,1,0,0-56.9l-8.52,9.62a8,8,0,1,1-12-10.61l8.69-9.81.33-.35A56,56,0,0,1,248,128Z"></path></svg>
+                In Stock
+              </span>
+            {% else %}
+              {{ product.stock + ' In Stock' }}
+            {% endif %}
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+</a>

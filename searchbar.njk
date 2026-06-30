@@ -1,0 +1,99 @@
+{% set alignClassMap = {
+  'left': '',
+  'center': 'mx-auto',
+  'right': 'ml-auto'
+} %}
+
+{% set alignClass = alignClassMap[alignment] %}
+
+<div
+  class="mb-4"
+  x-data="{
+    searchTerm: '',
+    shouldShowItem(el) {
+      return this.searchTerm === '' || decodeHtmlEntities(el.dataset.name.toLowerCase()).includes(this.searchTerm.toLowerCase());
+    },
+    isModalOpen: false,
+    openModal() {
+      this.isModalOpen = true;
+      document.body.style.overflow = 'hidden';
+
+      setTimeout(() => {
+        this.$refs.searchInput.focus();
+      }, 100);
+    },
+    closeModal() {
+      this.isModalOpen = false;
+      document.body.style.overflow = 'auto';
+    }
+  }">
+  <div class="bg-card/75 border border-white/5">
+    <div class="flex items-center gap-4 max-w-xl text-t-primary/80 text-sm p-3 cursor-pointer transform transition-colors duration-150 ease-in-out hover:bg-white/[0.025] focus-within:ring-2 focus-within:ring-accent-500 {{ alignClass }}" @click="openModal">
+      <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="currentColor" d="m29 27.586l-7.552-7.552a11.018 11.018 0 1 0-1.414 1.414L27.586 29ZM4 13a9 9 0 1 1 9 9a9.01 9.01 0 0 1-9-9"/></svg>
+      <input type="text" class="bg-transparent cursor-pointer focus:outline-none" placeholder="Search for products..." readonly />
+    </div>
+  </div>
+
+  <div x-show="isModalOpen" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen px-4 text-center">
+      <div x-cloak @click="closeModal" x-show="isModalOpen"
+        x-transition:enter="transition ease-out duration-300 transform"
+        x-transition:enter-start="opacity-0" 
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200 transform"
+        x-transition:leave-start="opacity-100" 
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 transition-opacity bg-black/75" aria-hidden="true"
+      ></div>
+
+      <div x-cloak x-show="isModalOpen" 
+        x-transition:enter="transition ease-out duration-300 transform"
+        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+        x-transition:leave="transition ease-in duration-200 transform"
+        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
+        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        class="inline-block w-full max-w-[76rem] transition-all transform"
+      >
+        <div class="overflow-hidden text-t-primary text-left border border-white/5 bg-background p-4 md:p-6">
+          <div class="flex items-center justify-between gap-4 mb-4 sm:mb-6">
+            <div class="flex-1 flex items-center gap-4 bg-white/[0.025] border border-white/5 text-t-primary/80 text-sm p-3 focus-within:ring-2 focus-within:ring-accent-500 {{ alignClass }}">
+              <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="currentColor" d="m29 27.586l-7.552-7.552a11.018 11.018 0 1 0-1.414 1.414L27.586 29ZM4 13a9 9 0 1 1 9 9a9.01 9.01 0 0 1-9-9"/></svg>
+              <input type="text" class="bg-transparent focus:outline-none" placeholder="Search for products..." x-ref="searchInput" x-model="searchTerm">
+            </div>
+
+            <button @click="closeModal" class="flex items-center justify-center size-[2.875rem] bg-white/[0.025] border border-white/5 text-t-primary/75 transition-colors ease-in-out duration-150 focus:outline-none hover:text-accent-500 hover:bg-accent-500/10">
+              <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" x-ref="productsContainer">
+            {% for item in sortedItems %}
+              {% if item.type != 'group' %}
+                <div
+                  x-show="shouldShowItem($el)"
+                  x-transition
+                  data-name="{{ item.name | lower | escape }}"
+                >
+                  {% render_snippet "product-card.njk", product=item %}
+                </div>
+              {% else %}
+                {% for product in item.products %}
+                  <div
+                    x-show="shouldShowItem($el)"
+                    x-transition
+                    data-name="{{ product.name | lower | escape }}"
+                  >
+                    {% render_snippet "product-card.njk", product=product %}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

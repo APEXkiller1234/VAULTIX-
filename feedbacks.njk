@@ -1,0 +1,106 @@
+{% set data = [] %}
+{% if feedbacks %}
+  {% set data = feedbacks %}
+{% elif latest_feedbacks %}
+  {% set data = latest_feedbacks %}
+{% endif %}
+
+<section id="{{ componentId }}" class="component reveal-on-scroll" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    {% if properties.title %}
+      <div class="flex items-center justify-center mb-4 md:mb-6 lg:mb-8">
+        <div class="inline-block">
+          <h1 class="text-t-primary text-2xl text-center font-bold md:text-3xl lg:text-4xl">
+            {{ properties.title | renderString }}
+          </h1>
+          <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+        </div>
+      </div>
+    {% endif %}
+
+    {% if templateName == 'feedback' and feedbacks|length > 0 %}
+      <div class="flex my-4 md:my-6 md:justify-end">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 md:min-w-lg">
+          <div class="text-sm text-t-primary/80">
+            Sort Reviews By
+          </div>
+          <div class="min-w-72">
+            <select class="order-select">
+              <option value="created_at_desc">
+                Newest First
+              </option>
+              <option value="created_at_asc">
+                Oldest First
+              </option>
+              <option value="rating_desc">
+                Highest Rated First
+              </option>
+              <option value="rating_asc">
+                Lowest Rated First
+              </option>
+              <option value="is_automatic_asc">
+                Non-Automatic First
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if data|length > 0 %}
+      <div class="w-full grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        {% for feedback in data.slice(0, (properties.amount if properties.amount else data|length)) %}
+          {% render_snippet "feedback-card.njk", feedback=feedback %}
+        {% endfor %}
+      </div>
+      {% if feedbacks_paginator %}
+        {% if feedbacks_paginator.last_page > 1 %}
+          {% render_snippet "pagination.njk", paginator=feedbacks_paginator %}
+        {% endif %}
+      {% elif data|length >= properties.amount %}
+        <div class="flex justify-center mt-8">
+          <a href="{{ '/feedback' | shopUrl }}" class="text-accent-500 hover:underline">
+            View All Reviews
+          </a>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="text-t-primary/50">
+        {% if templateName == 'product' %}
+          No reviews about this product yet.
+        {% else %}
+          No reviews yet.
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if templateName == 'feedback' %}
+  <script>
+    document.addEventListener('alpine:init', () => {
+      document.querySelectorAll('.order-select').forEach((element) => {
+        const choices = new Choices(element, { shouldSort: false });
+        
+        choices.passedElement.element.addEventListener('change', (event) => {
+          const orderParts = event.detail.value.split('_');
+          const orderDirection = orderParts.pop();
+          const orderColumn = orderParts.join('_');
+
+          const url = new URL(window.location.href);
+          url.searchParams.set('orderColumn', orderColumn);
+          url.searchParams.set('orderDirection', orderDirection);
+          window.location.href = url.toString();
+        });
+
+        choices.setChoiceByValue('{{ orderColumn }}_{{ orderDirection }}');
+
+        // Workaround to fix default value highlight issue
+        const selectedChoiceElement = choices.choiceList.element.querySelector('.is-selected');
+        if (selectedChoiceElement) {
+          choices._highlightChoice(selectedChoiceElement);
+        }
+      });
+    });
+  </script>
+{% endif %}

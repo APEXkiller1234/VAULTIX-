@@ -1,0 +1,78 @@
+{% set titleAlignClassMap = {
+  'left': '',
+  'center': 'justify-center text-center',
+  'right': 'justify-end text-right'
+} %}
+
+{% set contentAlignClassMap = {
+  'left': 'flex-col lg:flex-row',
+  'center': 'flex-col items-center',
+  'right': 'flex-col lg:flex-row-reverse'
+} %}
+
+{% set textAlignClassMap = {
+  'left': 'text-left',
+  'center': 'text-center',
+  'right': 'text-right'
+} %}
+
+{% set buttonAlignClassMap = {
+  'left': 'justify-start',
+  'center': 'justify-center',
+  'right': 'justify-end'
+} %}
+
+{% set imageAspectClassMap = {
+  'Default': '',
+  '1/1': 'aspect-square lg:max-w-[50%]',
+  '4/3': 'aspect-[4/3] lg:max-w-[50%]',
+  '16/9': 'aspect-video lg:max-w-[50%]'
+} %}
+
+{% set titleAlignClass = titleAlignClassMap[properties.title_alignment] %}
+{% set contentAlignClass = contentAlignClassMap[properties.content_alignment] %}
+{% set textAlignClass = textAlignClassMap[properties.content_alignment] %}
+{% set buttonAlignClass = buttonAlignClassMap[properties.content_alignment] %}
+{% set imageAspectClass = imageAspectClassMap[properties.aspect_ratio] %}
+
+{% set backgroundClass = 'bg-card/75 border border-white/5 text-t-primary p-4 md:p-6' if properties.show_background else '' %}
+
+<section id="{{ componentId }}" class="component reveal-on-scroll" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    {% if properties.title and not properties.show_background %}
+      <div class="flex mb-4 md:mb-6 lg:mb-8 {{ titleAlignClass }}">
+        <div class="inline-block">
+          <h1 class="text-t-primary text-2xl font-bold md:text-3xl lg:text-4xl">
+            {{ properties.title | renderString }}
+          </h1>
+          <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="{{ backgroundClass }}">
+      {% if properties.title and properties.show_background %}
+        <div class="mb-4 {{ titleAlignClass }}">
+          <h2 class="inline text-t-primary text-2xl font-bold pl-2 border-l-4 border-l-accent-500">
+            {{ properties.title | renderString }}
+          </h2>
+        </div>
+      {% endif %}
+      <div class="flex gap-8 {{ contentAlignClass }}">
+        <div class="flex-1 flex flex-col gap-8 {{ textAlignClass }}">
+          <p class="text-base text-t-primary/50">
+            <span class="whitespace-pre-line">{{ properties.text | renderString }}</span>
+          </p>
+          {% if properties.buttons and properties.buttons.length > 0 %}
+          <div class="flex flex-wrap items-center gap-4 mt-4 {{ buttonAlignClass }}">
+            {% render_snippet "buttons.njk", buttons=properties.buttons %}
+          </div>
+          {% endif %}
+        </div>
+        <div class="overflow-hidden {{ imageAspectClass }}">
+          <img src="{{ properties.image | imageUrl }}" alt="" class="size-full object-scale-down" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

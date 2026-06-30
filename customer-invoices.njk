@@ -1,0 +1,101 @@
+{% set statusColorMap = {
+  'pending': 'bg-yellow-500/20 text-yellow-500 border-yellow-500/10',
+  'confirming': 'bg-blue-500/20 text-blue-500 border-blue-500/10',
+  'partially_completed': 'bg-yellow-500/20 text-yellow-500 border-yellow-500/10',
+  'completed': 'bg-green-500/20 text-green-500 border-green-500/10',
+  'out_of_stock': 'bg-orange-500/20 text-orange-500 border-orange-500/10',
+  'refunded': 'bg-teal-500/20 text-teal-500 border-teal-500/10'
+} %}
+
+<div class="container mx-auto">
+  <div class="relative px-4 lg:px-0 py-16 lg:py-32">
+    <div class="w-full mx-auto flex flex-col gap-4 md:gap-6 lg:gap-8 lg:flex-row">
+      <div class="lg:flex-1">
+        {% render_snippet "customer-sidebar.njk" %}
+      </div>
+      <div class="lg:w-3/4">
+        <div class="flex flex-col p-4 md:p-6 lg:p-7 bg-card/75 border border-white/5">
+          <h3 class="text-lg text-t-primary/80">
+            Order History
+          </h3>
+          <div class="mt-4 overflow-y-hidden">
+            {% if invoices.data.length > 0 %}
+              <table class="w-full text-left text-sm text-t-primary/80">
+                <thead class="text-xs text-t-primary/60 uppercase bg-white/5">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 w-8">ID</th>
+                    <th scope="col" class="px-6 py-3">Status</th>
+                    <th scope="col" class="px-6 py-3">Products</th>
+                    <th scope="col" class="px-6 py-3">Price</th>
+                    <th scope="col" class="px-6 py-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for invoice in invoices.data %}
+                    <tr class="border-b border-white/5">
+                      <td class="px-6 py-4">
+                        <a href="{{ invoice.url }}" target="_blank" class="text-accent-500 hover:underline">#{{ invoice.unique_id }}</a>
+                      </td>
+                      <td class="px-6 py-4 capitalize">
+                        <span>{{ invoice.status | replace('_', ' ') }}</span>
+                        <br>
+                        <span class="text-[10px] leading-none text-t-primary/60">
+                          {{ invoice.created_at | formatDateTime }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 truncate">
+                        {% if invoice.items %}
+                          {{ invoice.items[0].product.name }} 
+                          {% if invoice.items[0].variant and invoice.items[0].product.name != invoice.items[0].variant.name %}
+                            ({{ invoice.items[0].variant.name }})
+                          {% endif %}
+
+                          {% if invoice.items.length > 1 %}
+                            & {{ invoice.items.length - 1 }} more
+                          {% endif %}
+                        {% else %}
+                          Deleted Product
+                        {% endif %}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        {{ formatPrice(invoice.price, invoice.currency) }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        {% if shop.tickets_enabled %}
+                          {% if invoice.ticket %}
+                            <a href="/customer/tickets/{{ invoice.ticket.id }}" class="text-accent-500 hover:underline">
+                              View Ticket
+                            </a>
+                          {% else %}
+                            <button type="button" x-on:click="appTickets.modalOpen('{{ invoice.unique_id }}')" class="text-accent-500 hover:underline">
+                              Open Ticket
+                            </button>
+                          {% endif %}
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <p class="text-sm text-t-primary/60">
+                No Orders Yet
+              </p>
+            {% endif %}
+          </div>
+          {% if invoices.last_page > 1 %}
+            {% render_snippet "pagination.njk", paginator=invoices %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="components">
+  {% for componentId in components_order %}
+    {% render_component componentId %}
+  {% endfor %}
+</div>
+
+{% render_snippet "ticket-create-modal.njk" %}

@@ -1,0 +1,44 @@
+{% set data = [] %}
+{% if blog_posts %}
+  {% set data = blog_posts %}
+{% elif latest_blog_posts %}
+  {% set data = latest_blog_posts %}
+{% endif %}
+
+<section id="{{ componentId }}" class="component reveal-on-scroll" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    {% if properties.title %}
+      <div class="flex items-center justify-center mb-4 md:mb-6 lg:mb-8">
+        <div class="inline-block">
+          <h1 class="text-t-primary text-2xl text-center font-bold md:text-3xl lg:text-4xl">
+            {{ properties.title | renderString }}
+          </h1>
+          <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+        </div>
+      </div>
+    {% endif %}
+    
+    {% if data|length > 0 %}
+      <div class="flex flex-wrap gap-4 w-full {{ 'justify-center' if properties.centered }}">
+        {% for blogPost in data.slice(0, (properties.amount if properties.amount else data|length)) %}
+          <div class="w-full sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)] 2xl:w-[calc((100%-3rem)/4)]">
+            {% render_snippet "blog-post-card.njk", blogPost=blogPost %}
+          </div>
+        {% endfor %}
+      </div>
+      {% if blog_posts_paginator.last_page > 1 %}
+        {% render_snippet "pagination.njk", paginator=blog_posts_paginator %}
+      {% elif data|length >= properties.amount %}
+        <div class="flex justify-center mt-8">
+          <a href="{{ '/blog' | shopUrl }}" class="text-accent-500 hover:underline">
+            View All Posts
+          </a>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="text-t-primary/50">
+        No Blog Posts Yet.
+      </div>
+    {% endif %}
+  </div>
+</section>

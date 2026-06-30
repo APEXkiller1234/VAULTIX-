@@ -1,0 +1,56 @@
+<section id="{{ componentId }}" class="component reveal-on-scroll premium-stats-section" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    {% if properties.title %}
+      <div class="flex items-center justify-center mb-4 md:mb-6 lg:mb-8">
+        <div class="inline-block">
+          <h1 class="text-t-primary text-2xl text-center font-bold md:text-3xl lg:text-4xl">
+            {{ properties.title | renderString }}
+          </h1>
+          <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="premium-stats-grid w-full grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <article class="premium-stat-card reveal-on-scroll" style="--reveal-delay: 0ms;">
+        <div class="premium-stat-card__orb"></div>
+        <div class="premium-stat-card__icon"><i class="fa-solid fa-bolt"></i></div>
+        <div class="premium-stat-card__meta">
+          <div class="premium-stat-card__value" data-count="1000" data-suffix="+" data-decimals="0">1000+</div>
+          <div class="premium-stat-card__label">Products Sold</div>
+          <div class="premium-stat-card__note">Fast-moving catalog with active demand</div>
+        </div>
+      </article>
+
+      <article class="premium-stat-card reveal-on-scroll" style="--reveal-delay: 120ms;">
+        <div class="premium-stat-card__orb"></div>
+        <div class="premium-stat-card__icon"><i class="fa-solid fa-user-group"></i></div>
+        <div class="premium-stat-card__meta">
+          <div class="premium-stat-card__value" data-count="300" data-suffix="+" data-decimals="0">300+</div>
+          <div class="premium-stat-card__label">Total Customers</div>
+          <div class="premium-stat-card__note">Growing community of repeat buyers</div>
+        </div>
+      </article>
+
+      <article class="premium-stat-card reveal-on-scroll" style="--reveal-delay: 240ms;">
+        <div class="premium-stat-card__orb"></div>
+        <div class="premium-stat-card__icon"><i class="fa-solid fa-star"></i></div>
+        <div class="premium-stat-card__meta">
+          <div class="premium-stat-card__value" data-count="1000" data-suffix="+" data-decimals="0">1000+</div>
+          <div class="premium-stat-card__label">Reviews Received</div>
+          <div class="premium-stat-card__note">Social proof shown across the store</div>
+        </div>
+      </article>
+
+      <article class="premium-stat-card reveal-on-scroll" style="--reveal-delay: 360ms;">
+        <div class="premium-stat-card__orb"></div>
+        <div class="premium-stat-card__icon"><i class="fa-solid fa-gauge-high"></i></div>
+        <div class="premium-stat-card__meta">
+          <div class="premium-stat-card__value" data-count="4.9" data-suffix="" data-decimals="1">4.9</div>
+          <div class="premium-stat-card__label">Average Rating</div>
+          <div class="premium-stat-card__note">High satisfaction across the shop</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

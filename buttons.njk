@@ -1,0 +1,16 @@
+{% for button in buttons %}
+  {% if button.style == 'regular' %}
+  {% set bClass = 'text-t-primary bg-accent-500 border border-accent-600 hover:bg-accent-600' %}
+  {% elif button.style == 'outline' %}
+  {% set bClass = 'text-accent-500 border-accent-500 hover:bg-accent-500/10' %}
+  {% endif %}
+  <a
+    href="{{ (button.link | shopUrl) if button.link else '#' }}"
+    target="{{ 'blank' if button.new_tab }}"
+    class="inline-flex items-center gap-4 border px-6 py-2 text-sm font-semibold transition-colors ease-in-out duration-150 {{ bClass }}">
+    {{ button.text | renderString }}
+    {% if button.icon %}
+    <i class="{{ button.icon }} fa-fw"></i>
+    {% endif %}
+  </a>
+{% endfor %}

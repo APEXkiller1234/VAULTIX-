@@ -1,0 +1,20 @@
+<section id="{{ componentId }}" class="component reveal-on-scroll" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    <div class="flex items-center justify-center mb-4 md:mb-6 lg:mb-8">
+      <div class="inline-block">
+        <h1 class="text-t-primary text-2xl text-center font-bold md:text-3xl lg:text-4xl">
+          Refund Policy
+        </h1>
+        <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+      </div>
+    </div>
+  
+    <div class="max-w-3xl mx-auto">
+      <div class="bg-card/75 border border-white/5 text-t-primary/80 text-sm p-4 md:text-base md:p-6">
+        <div class="editor">
+          {{ refund_policy | safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

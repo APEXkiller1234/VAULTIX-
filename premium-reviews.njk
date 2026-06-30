@@ -1,0 +1,83 @@
+{% set review_items = [
+  { name: 'Mason', rating: 5, text: 'Support replied extremely fast and helped me with everything I needed right away.' },
+  { name: 'Ava', rating: 5, text: 'Very high quality products and the delivery was instant after purchase.' },
+  { name: 'Noah', rating: 4, text: 'Bought multiple times already. Legit service with really reliable support.' },
+  { name: 'Luna', rating: 5, text: 'Fast delivery and professional customer service throughout the entire process.' },
+  { name: 'Ethan', rating: 5, text: 'Support answered my Discord ticket quickly and helped me claim everything easily.' },
+  { name: 'Zoe', rating: 4, text: 'Very trustworthy service. Product quality was better than expected.' },
+  { name: 'Kai', rating: 5, text: 'One of the smoothest experiences I have had. Instant delivery and legit products.' },
+  { name: 'Mila', rating: 5, text: 'Fast support, secure checkout, and really high quality service overall.' },
+  { name: 'Leo', rating: 5, text: 'Everything was delivered exactly as described and support stayed active the whole time.' },
+  { name: 'Ivy', rating: 4, text: 'The Discord support team was friendly, fast, and very helpful after purchase.' },
+  { name: 'Finn', rating: 4, text: 'Reliable products, quick delivery, and excellent response times from support.' },
+  { name: 'Nora', rating: 5, text: 'The whole process felt safe, professional, and very trustworthy.' },
+  { name: 'Jude', rating: 5, text: 'High quality service with responsive support staff that actually helps customers.' },
+  { name: 'Aria', rating: 5, text: 'The products are legit and the support team takes care of issues quickly.' },
+  { name: 'Owen', rating: 4, text: 'Purchased through crypto and everything went through instantly without problems.' },
+  { name: 'Esme', rating: 5, text: 'Customer support was active late at night and solved my issue almost immediately.' },
+  { name: 'Theo', rating: 4, text: 'Very smooth checkout process with fast delivery and clear communication.' },
+  { name: 'Ruby', rating: 5, text: 'The service feels trustworthy and the product quality is honestly really good.' },
+  { name: 'Milo', rating: 5, text: 'Fast delivery, helpful support, and high quality products every time.' },
+  { name: 'Chloe', rating: 4, text: 'Everything about the service felt professional, secure, and reliable from start to finish.' }
+] %}
+
+<section class="premium-reviews-section reveal-on-scroll" aria-label="Showcase reviews">
+  <div class="premium-reviews-shell">
+    <div class="premium-reviews-copy">
+      <div class="premium-section-kicker">Customer Vouches</div>
+      <h2 class="premium-section-title">What Buyers Say</h2>
+      <p class="premium-section-subtitle">Check what our latest customer say about us.</p>
+    </div>
+
+    <div class="premium-reviews-viewport" data-premium-reviews-viewport tabindex="0" aria-label="Rotating customer reviews">
+      <div class="premium-reviews-track" data-premium-reviews-track>
+        {% for review in review_items %}
+          <article class="premium-review-card">
+            <div class="premium-review-stars" aria-label="{{ review.rating }} out of 5 stars">
+              {% if review.rating == 5 %}
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              {% else %}
+                <span>★</span><span>★</span><span>★</span><span>★</span><span class="is-muted">★</span>
+              {% endif %}
+            </div>
+
+            <p class="premium-review-message">
+              {{ review.text }}
+            </p>
+
+            <div class="premium-review-footer">
+              <div class="min-w-0">
+                <div class="premium-review-name">{{ review.name }}</div>
+                <div class="premium-review-tag">Rating</div>
+              </div>
+              <div class="premium-review-badge">{{ review.rating }}/5</div>
+            </div>
+          </article>
+        {% endfor %}
+        {% for review in review_items %}
+          <article class="premium-review-card" aria-hidden="true">
+            <div class="premium-review-stars">
+              {% if review.rating == 5 %}
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              {% else %}
+                <span>★</span><span>★</span><span>★</span><span>★</span><span class="is-muted">★</span>
+              {% endif %}
+            </div>
+
+            <p class="premium-review-message">
+              {{ review.text }}
+            </p>
+
+            <div class="premium-review-footer">
+              <div class="min-w-0">
+                <div class="premium-review-name">{{ review.name }}</div>
+                <div class="premium-review-tag">Rating</div>
+              </div>
+              <div class="premium-review-badge">{{ review.rating }}/5</div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>

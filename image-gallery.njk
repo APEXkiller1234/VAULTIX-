@@ -1,0 +1,40 @@
+{% if properties.items_per_row == 1 %}
+  {% set gridClass = 'grid-cols-1' %}
+{% elif properties.items_per_row == 2 %}
+  {% set gridClass = 'grid-cols-1 md:grid-cols-2' %}
+{% elif properties.items_per_row == 3 %}
+  {% set gridClass = 'grid-cols-1 md:grid-cols-3' %}
+{% elif properties.items_per_row == 4 %}
+  {% set gridClass = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' %}
+{% endif %}
+
+{% set aspectClassMap = {
+  'Default': '',
+  '1/1': 'aspect-square',
+  '4/3': 'aspect-[4/3]',
+  '16/9': 'aspect-video'
+} %}
+
+<section id="{{ componentId }}" class="component reveal-on-scroll" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    {% if properties.title %}
+      <div class="flex items-center justify-center mb-4 md:mb-6 lg:mb-8">
+        <div class="inline-block">
+          <h1 class="text-t-primary text-2xl text-center font-bold md:text-3xl lg:text-4xl">
+            {{ properties.title | renderString }}
+          </h1>
+          <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="grid gap-4 {{ gridClass }}">
+      {% for image in properties.images %}
+      {% set aspectClass = aspectClassMap[properties.aspect_ratio] %}
+      <div class="{{ aspectClass }}">
+        <img src="{{ image | imageUrl }}" alt="" class="object-scale-down w-full h-full" loading="lazy">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

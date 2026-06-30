@@ -1,0 +1,76 @@
+{% set statusLabelMap = {
+  'pending': 'Awaiting Your Response',
+  'open': 'Awaiting Support Response',
+  'closed': 'Closed'
+} %}
+
+<div class="container mx-auto">
+  <div class="relative px-4 lg:px-0 py-16 lg:py-32">
+    <div class="w-full mx-auto flex flex-col gap-4 md:gap-6 lg:gap-8 lg:flex-row">
+      <div class="lg:flex-1">
+        {% render_snippet "customer-sidebar.njk" %}
+      </div>
+      <div class="lg:w-3/4">
+        <div class="flex items-center gap-3 border border-accent-500/10 bg-accent-500/5 p-3 mb-4">
+          <i class="ml-2 fa fa-info-circle text-accent-500"></i>
+          <p class="flex-1 text-sm text-t-primary/80">
+            You can open a new ticket on the <a href="{{ '/customer/invoices' | shopUrl }}" class="text-accent-500 hover:underline">Orders</a> page by clicking on the "Open Ticket" button next to an order.
+          </p>
+        </div>
+        
+        <div class="flex flex-col p-4 md:p-6 lg:p-7 bg-card/75 border border-white/5">
+          <h3 class="text-lg text-t-primary/80">
+            Tickets
+          </h3>
+          <div class="mt-4 overflow-hidden">
+            {% if tickets.length > 0 %}
+              <table class="w-full text-left text-sm text-t-primary/80">
+                <thead class="text-xs text-t-primary/60 uppercase bg-white/5">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Subject</th>
+                    <th scope="col" class="px-6 py-3">Status</th>
+                    <th scope="col" class="px-6 py-3">Opened At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for ticket in tickets %}
+                    <tr class="border-b border-white/5">
+                      <td class="px-6 py-4 truncate">
+                        <a href="{{ ('/customer/tickets/' ~ ticket.id) | shopUrl }}" class="text-accent-500 hover:underline">
+                          {{ ticket.subject }}
+                        </a>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        {% if ticket.status in statusLabelMap %}
+                          {{ statusLabelMap[ticket.status] }}
+                        {% else %}
+                          <span class="capitalize">{{ ticket.status | replace('_', ' ') }}</span>
+                        {% endif %}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        {{ ticket.created_at | formatDateTime }}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <p class="text-sm text-t-primary/60">
+                No Tickets Yet
+              </p>
+            {% endif %}
+          </div>
+          {% if tickets_paginator.last_page > 1 %}
+            {% render_snippet "pagination.njk", paginator=tickets_paginator %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="components">
+  {% for componentId in components_order %}
+    {% render_component componentId %}
+  {% endfor %}
+</div>

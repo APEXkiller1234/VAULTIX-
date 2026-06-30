@@ -1,0 +1,28 @@
+<div class="announcement component {{ '' if (global.components.announcement.announcements.length > 0) else 'hidden' }}" data-component-id="announcement">
+  <div class="p-2 text-t-accent text-sm text-center bg-accent-500 border border-accent-600">
+    <div
+      x-data="{
+        duration: 3000,
+        activeIndex: 0,
+        interval: null,
+        startInterval() {
+          this.interval = setInterval(() => {
+            this.activeIndex = (this.activeIndex + 1) % {{ global.components.announcement.announcements | length }};
+          }, this.duration);
+        }
+      }"
+      x-init="startInterval"
+      class="overflow-hidden h-5"
+    >
+      {% for announcement in global.components.announcement.announcements %}
+        <p
+          x-show="activeIndex === {{ loop.index0 }}"
+          {{ 'x-cloak' if not loop.first }}
+          class="font-medium text-center animate-announcement-fade truncate line-clamp-1"
+        >
+          {% render_snippet "announcement-item.njk", announcement=announcement %}
+        </p>
+      {% endfor %}
+    </div>
+  </div>
+</div>

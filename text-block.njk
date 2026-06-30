@@ -1,0 +1,50 @@
+{% set titleAlignClassMap = {
+  'left': '',
+  'center': 'justify-center text-center',
+  'right': 'justify-end text-right'
+} %}
+
+{% set contentAlignClassMap = {
+  'left': 'text-left',
+  'center': 'mx-auto text-center',
+  'right': 'ml-auto mr-0 text-right'
+} %}
+
+{% set buttonAlignClassMap = {
+  'left': 'justify-start',
+  'center': 'justify-center',
+  'right': 'justify-end'
+} %}
+
+{% set titleAlignClass = titleAlignClassMap[properties.title_alignment] %}
+{% set contentAlignClass = contentAlignClassMap[properties.content_alignment] %}
+{% set buttonAlignClass = buttonAlignClassMap[properties.content_alignment] %}
+
+{% set backgroundClass = 'bg-card/75 border border-white/5 text-t-primary p-4 md:p-6' if properties.show_background else '' %}
+
+<section id="{{ componentId }}" class="component reveal-on-scroll" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    <div class="{{ backgroundClass }}">
+      {% if properties.title and not properties.show_background %}
+        <div class="flex mb-4 md:mb-6 lg:mb-8 {{ titleAlignClass }}">
+          <div class="inline-block">
+            <h1 class="text-t-primary text-2xl font-bold md:text-3xl lg:text-4xl">
+              {{ properties.title | renderString }}
+            </h1>
+            <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+          </div>
+        </div>
+      {% endif %}
+      <div class="{{ contentAlignClass }}">
+        <p class="text-base text-t-primary/50">
+          <span class="whitespace-pre-line">{{ properties.text | renderString }}</span>
+        </p>
+        {% if properties.buttons and properties.buttons.length > 0 %}
+        <div class="flex flex-wrap items-center gap-4 mt-4 {{ buttonAlignClass }}">
+          {% render_snippet "buttons.njk", buttons=properties.buttons %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

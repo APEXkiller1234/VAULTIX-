@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% render_snippet "meta-tags.njk" %}
+    
+    <link href="{{ 'built.css' | assetUrl }}" rel="stylesheet"/>
+    <link href="{{ 'custom.css' | assetUrl }}" rel="stylesheet"/>
+
+    <style id="theme-styles">
+      :root {
+        --cl-accent: {{ global.properties.accent_color | hex_to_rgb }};
+        --cl-background: {{ global.properties.background_color | hex_to_rgb }};
+        --cl-card: {{ global.properties.card_color | hex_to_rgb }};
+        --cl-t-primary: {{ (global.properties.text_primary_color if global.properties.text_primary_color else '#ffffff') | hex_to_rgb }};
+        --cl-t-accent: {{ (global.properties.text_accent_color if global.properties.text_accent_color else '#ffffff') | hex_to_rgb }};
+        --cl-snow: {{ (global.properties.snow_color if global.properties.snow_color else '#ffffff') | hex_to_rgb }};
+
+        --product-card-image-aspect-ratio: {{ (global.properties.product_card_image_aspect_ratio if global.properties.product_card_image_aspect_ratio else '16/9') }};
+        --product-page-image-aspect-ratio: {{ (global.properties.product_page_image_aspect_ratio if global.properties.product_page_image_aspect_ratio else '16/9') }};
+        --group-card-image-aspect-ratio: {{ (global.properties.group_card_image_aspect_ratio if global.properties.group_card_image_aspect_ratio else '16/9') }};
+        --blog-card-image-aspect-ratio: {{ (global.properties.blog_card_image_aspect_ratio if global.properties.blog_card_image_aspect_ratio else '16/9') }};
+        --product-image-fit: {{ (global.properties.product_image_fit if global.properties.product_image_fit else 'cover') }};
+        --group-image-fit: {{ (global.properties.group_image_fit if global.properties.group_image_fit else 'cover') }};
+
+        /* Galactic palette */
+        --galaxy-violet: 123, 92, 255;
+        --galaxy-light: 179, 136, 255;
+        --galaxy-magenta: 255, 92, 200;
+        --galaxy-blue: 76, 110, 255;
+      }
+
+      body {
+        font-family: '{{ (global.properties.font if global.properties.font else 'Play') }}', sans-serif;
+      }
+
+      /* ---------- Galactic / Void background ---------- */
+      #galaxy-nebula {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+          radial-gradient(ellipse 60% 55% at 18% 15%, rgba(var(--galaxy-violet), 0.20), transparent 60%),
+          radial-gradient(ellipse 55% 50% at 85% 22%, rgba(var(--galaxy-magenta), 0.14), transparent 60%),
+          radial-gradient(ellipse 75% 65% at 50% 98%, rgba(var(--galaxy-blue), 0.18), transparent 65%);
+        animation: nebula-drift 32s ease-in-out infinite alternate;
+        will-change: transform, opacity;
+      }
+
+      #galaxy-aurora {
+        position: fixed;
+        inset: -60%;
+        z-index: -1;
+        pointer-events: none;
+        background:
+          conic-gradient(from 180deg at 50% 50%,
+            transparent 0deg,
+            rgba(var(--galaxy-violet), 0.07) 90deg,
+            transparent 180deg,
+            rgba(var(--galaxy-magenta), 0.05) 270deg,
+            transparent 360deg);
+        animation: aurora-spin 60s linear infinite;
+        will-change: transform;
+      }
+
+      @keyframes nebula-drift {
+        0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 0.85; }
+        50%  { transform: translate3d(-2%, 1.5%, 0) scale(1.05); opacity: 1; }
+        100% { transform: translate3d(2%, -1.5%, 0) scale(1.02); opacity: 0.9; }
+      }
+
+      @keyframes aurora-spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* ---------- Galactic premium cursor glow ---------- */
+      .premium-cursor-dot {
+        border-radius: 999px;
+        box-shadow: 0 0 12px rgba(var(--galaxy-light), 0.9);
+      }
+
+      .premium-cursor-ring {
+        border-radius: 999px;
+        box-shadow:
+          0 0 18px rgba(var(--galaxy-violet), 0.55),
+          inset 0 0 12px rgba(var(--galaxy-violet), 0.30);
+      }
+
+/* ---------- Galactic scrollbar ---------- */
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: rgba(10, 12, 22, 0.6); }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, rgb(var(--galaxy-violet)), rgb(var(--galaxy-light)));
+        border-radius: 999px;
+        box-shadow: 0 0 10px rgba(var(--galaxy-violet), 0.6);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, rgb(var(--galaxy-light)), rgb(var(--galaxy-magenta)));
+      }
+
+      ::selection {
+        background: rgba(var(--galaxy-violet), 0.45);
+        color: #fff;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #galaxy-nebula,
+        #galaxy-aurora { animation: none; }
+      }
+    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family={{ (global.properties.font if global.properties.font else 'Play') | replace(" ", "+") }}:wght@300;400;500;600;700&display=swap" rel="stylesheet" id="theme-font">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet" integrity="sha256-5uKiXEwbaQh9cgd2/5Vp6WmMnsUr3VZZw0a8rKnOKNU=" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css" rel="stylesheet" integrity="sha256-gS3HxgWFFFqEo0wQoALebu5XlWdYr3gqd4/Tk5wt8Ig=" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.3/src/lite-yt-embed.css" rel="stylesheet" integrity="sha256-qwd4FE0YEnXtN1D9SlLRzgZ35aJTclA5jg1poUQA3dE=" crossorigin="anonymous" />
+  </head>
+  <body class="text-t-primary" style="background-color: rgb({{ global.properties.background_color | hex_to_rgb }});">
+    {% if shop.background_image_url %}
+      <div class="fixed inset-0 z-[-1] bg-center bg-cover pointer-events-none" style="background-image: url({{ shop.background_image_url }});"></div>
+    {% endif %}
+
+    <div id="galaxy-aurora" aria-hidden="true"></div>
+    <div id="galaxy-nebula" aria-hidden="true"></div>
+    <div id="galaxy-scroll-core" aria-hidden="true"></div>
+
+    <div id="particles-js" class="fixed inset-0 z-0 size-full"></div>
+    
+    <div id="app" x-data="app">
+      {% if templateName != 'maintenance' %}
+        {% render_component "announcement" %}
+      {% endif %}
+
+      <div class="flex flex-col justify-between max-w-[85rem] min-h-screen mx-auto p-4 relative md:p-6 lg:p-8">
+        <div>
+          {% if templateName != 'maintenance' %}
+            {% render_component "navbar" %}
+          {% endif %}
+
+          {{ templateContent | safe }}
+        </div>
+
+        {% if templateName != 'maintenance' %}
+          {% render_component "footer" %}
+          {% render_snippet "customer-login-modal.njk" %}
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      window.shopId = {{ shop.id | json }};
+      window.apiBaseUrl = {{ '' | apiInternalUrl | json }};
+      window.currencyRatesUsd = {{ currency_rates_usd | json }};
+      window.currencySymbols = {{ currency_symbols | json }};
+      window.defaultCurrency = {{ currency | json }};
+      window.shopCustomer = {{ shop_customer | json }};
+    </script>
+
+    {% if isBuilder %}
+      {% render_snippet "script-builder.njk" %}
+    {% endif %}
+
+    {% if altcha or altcha_shop_customer %}
+      <script type="module">
+        import { Altcha } from 'https://cdn.jsdelivr.net/npm/altcha@1.2.0/+esm'
+      </script>
+    {% elif shop.recaptcha_key %}
+      <script src="https://www.google.com/recaptcha/api.js?render={{ shop.recaptcha_key }}"></script>
+    {% endif %}
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"
+      integrity="sha256-WCzAhd2P6gRJF9Hv3oOOd+hFJi/QJbv+Azn4CGB8gfY="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"
+      integrity="sha256-FZsW7H2V5X9TGinSjjwYJ419Xka27I8XPDmWryGlWtw="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"
+      integrity="sha256-P+JgcxEeZtxwYS1+TAAuusKFM646SB8Oodk0TYu9zuo="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/lite-youtube-embed@0.3.3/src/lite-yt-embed.js"
+      integrity="sha256-t8Thbv2D6x0AC5rMk+Ydz589Zq4lp8ZC4iVfNNdxs5U="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="{{ 'script.js' | assetUrl }}"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"
+      integrity="sha256-aJ9ROXjRHWn00zeU9ylsmlhqLlXeebtEfN28P0dPnwc="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.js"
+      integrity="sha256-icjghcPaibMf1jv4gQIGi5MeWNHem2SispcorCiCfSg="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      // Galactic starfield: multi-color twinkling stars with a subtle constellation web
+      particlesJS({
+        "particles": {
+          "number": {
+            "value": 44,
+            "density": {
+              "enable": true,
+              "value_area": 900
+            }
+          },
+          "color": {
+            "value": ["{{ global.properties.accent_color }}", "#b388ff", "#ffffff", "#7b5cff", "#ff5cc8"]
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            }
+          },
+          "opacity": {
+            "value": 0.7,
+            "random": true,
+            "anim": {
+              "enable": true,
+              "speed": 0.8,
+              "opacity_min": 0.15,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 2.4,
+            "random": true,
+            "anim": {
+              "enable": true,
+              "speed": 2,
+              "size_min": 0.3,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": true,
+            "distance": 140,
+            "color": "#7b5cff",
+            "opacity": 0.18,
+            "width": 1
+          },
+          "move": {
+            "enable": true,
+            "speed": 0.6,
+            "direction": "none",
+            "random": true,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": {
+              "enable": false,
+              "rotateX": 600,
+              "rotateY": 1200
+            }
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": false,
+              "mode": "grab"
+            },
+            "onclick": {
+              "enable": false,
+              "mode": "push"
+            },
+            "resize": true  
+          },
+          "modes": {
+            "grab": {
+              "distance": 160,
+              "line_linked": {
+                "opacity": 0.5
+              }
+            },
+            "push": {
+              "particles_nb": 1
+            }
+          }
+        },
+        "retina_detect": true
+      });
+    </script>
+
+    {% if global.properties.snow %}
+      <div id="snow"></div>
+      <script>snow({ count: 45 });</script>
+    {% endif %}
+
+    <div class="premium-cursor-dot" aria-hidden="true"></div>
+    <div class="premium-cursor-ring" aria-hidden="true"></div>
+
+    {% render_snippet "script-integrations.njk" %}
+  </body>
+</html>

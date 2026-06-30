@@ -1,0 +1,160 @@
+<nav
+  class="component reveal-on-scroll"
+  data-component-id="navbar"
+  x-data="{
+    isCollapsed: true,
+    menuHeight: 0
+  }"
+>
+  <div class="bg-card/75 border border-white/5">
+    <div class="flex items-center justify-between flex-wrap w-full">
+      <div class="flex items-center p-4 lg:p-6">
+        {% if global.components.navbar.show_logo or global.components.navbar.show_shop_name %}
+          <a href="{{ '/' | shopUrl }}" class="flex items-center justify-center gap-4 lg:justify-start">
+            {% if global.components.navbar.show_logo and shop.image_url %}
+              <img
+                src="{{ shop.image_url }}"
+                alt="{{ shop.name }}"
+                class="max-h-10"
+              />
+            {% endif %}
+            {% if global.components.navbar.show_shop_name %}
+              <h1 class="text-t-primary text-xl lg:text-2xl font-bold">{{ shop.name }}</h1>
+            {% endif %}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="flex items-center gap-4 mr-4">
+        {% if not global.components.navbar.hide_currency_selector %}
+          {% if currency_rates_usd | length > 1 %}
+            <label class="void-native-money-selector void-native-money-selector--mobile lg:hidden relative" aria-label="Select currency">
+              <span class="void-native-money-selector__symbol" data-currency-symbol>
+                {{ currency_symbols[currency] if currency_symbols[currency] else '$' }}
+              </span>
+              <span class="void-native-money-selector__code" data-currency-current>{{ currency.toUpperCase() }}</span>
+              <i class="fa fa-chevron-down void-native-money-selector__chevron" aria-hidden="true"></i>
+              <select
+                class="void-native-money-selector__select"
+                data-currency-select
+                aria-label="Select currency"
+                @change="appCurrency.setCurrency($event.target.value)"
+              >
+                {% for code, rate in currency_rates_usd %}
+                  <option value="{{ code.toLowerCase() }}" {% if code.toLowerCase() == currency.toLowerCase() %}selected{% endif %}>{{ code.toUpperCase() }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          {% endif %}
+        {% endif %}
+
+        {% if not global.components.navbar.hide_cart %}
+          <a href="{{ '/cart' | shopUrl }}" class="inline-flex items-center justify-center size-10 relative bg-card border border-white/5 text-t-primary/75 text-base transition-all ease-in-out duration-150 lg:hidden hover:bg-accent-500/10 hover:text-accent-500 focus:outline-none">
+            <i class="fa fa-cart-shopping"></i>
+            <template x-if="appCart.countWithQuantities > 0">
+              <span class="absolute -top-2 -right-2 inline-flex items-center justify-center size-[1.125rem] bg-accent-500 text-t-primary text-[0.625rem] rounded-full">
+                <span x-text="appCart.countWithQuantities > 9 ? '9+' : appCart.countWithQuantities"></span>
+              </span>
+            </template>
+          </a>
+        {% endif %}
+
+        <button
+          type="button" 
+          x-on:click="isCollapsed = !isCollapsed; $nextTick(() => menuHeight = isCollapsed ? 0 : $refs.menu.scrollHeight)" 
+          class="inline-flex items-center justify-center size-10 bg-card border border-white/5 text-t-primary/75 text-sm transition-all ease-in-out duration-150 lg:hidden hover:bg-accent-500/10 hover:text-accent-500 focus:outline-none"
+        >
+          <svg class="size-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+          </svg>
+        </button>
+      </div>
+
+      <div
+        x-ref="menu" 
+        class="w-full overflow-hidden lg:overflow-visible transition-all duration-150 ease-in-out lg:w-auto lg:!h-auto"
+        x-bind:style="{ height: isCollapsed ? '0px' : menuHeight + 'px' }"
+        x-cloak
+      >
+        <div class="flex flex-col gap-2 p-2 lg:flex-row lg:justify-between lg:items-center lg:gap-4 lg:p-6">
+          {% for link in global.components.navbar.links %}
+          {% set lActive = false %}
+          {% if (link.link == '/' and templateName == 'shop') or (link.link == '/cart' and templateName == 'cart') or (link.link == '/products' and templateName == 'products') or (link.link == '/terms-of-service' and templateName == 'terms') or (link.link == '/privacy-policy' and templateName == 'privacy-policy') or (link.link == '/refund-policy' and templateName == 'refund-policy') or (link.link == '/feedback' and templateName == 'feedback') or (link.link == '/status' and templateName == 'status') or (link.link == '/faq' and templateName == 'faq') or (link.link == '/blog' and templateName == 'blog') %}
+          {% set lActive = true %}
+          {% endif %}
+
+          {% if lActive and link.shape == 'regular' %}
+          {% set lClass = 'text-t-primary' %}
+          {% elif not lActive and link.shape == 'regular' %}
+          {% set lClass = 'text-t-primary/80 hover:text-t-primary' %}
+          {% elif lActive and link.shape == 'button' %}
+          {% set lClass = 'text-t-primary bg-accent-700 border border-accent-800 hover:bg-accent-800' %}
+          {% elif not lActive and link.shape == 'button' %}
+          {% set lClass = 'text-t-primary bg-accent-500 border border-accent-600 hover:bg-accent-600' %}
+          {% endif %}
+
+          <a
+            href="{{ link.link | shopUrl }}"
+            target="{{ '_blank' if link.new_tab }}"
+            class="px-4 py-2 whitespace-nowrap text-base font-medium {{ lClass }}"
+          >
+            {{ link.text }}
+          </a>
+          {% endfor %}
+
+          {% if not global.components.navbar.hide_customer_dashboard %}
+            {% if shop_customer %}
+              <a
+                href="{{ '/customer/dashboard' | shopUrl }}"
+                class="px-4 py-2 whitespace-nowrap text-base font-medium text-left text-t-primary/80 hover:text-t-primary"
+              >
+                My Account
+              </a>
+            {% else %}
+              <button
+                type="button"
+                @click="appCustomer.loginOrRedirect()"
+                class="px-4 py-2 whitespace-nowrap text-base font-medium text-left text-t-primary/80 hover:text-t-primary"
+              >
+                Login
+              </button>
+            {% endif %}
+          {% endif %}
+
+          {% if not global.components.navbar.hide_currency_selector %}
+          {% if currency_rates_usd | length > 1 %}
+            <label class="void-native-money-selector void-native-money-selector--desktop hidden lg:inline-grid relative" aria-label="Select currency">
+              <span class="void-native-money-selector__symbol" data-currency-symbol>
+                {{ currency_symbols[currency] if currency_symbols[currency] else '$' }}
+              </span>
+              <span class="void-native-money-selector__code" data-currency-current>{{ currency.toUpperCase() }}</span>
+              <i class="fa fa-chevron-down void-native-money-selector__chevron" aria-hidden="true"></i>
+              <select
+                class="void-native-money-selector__select"
+                data-currency-select
+                aria-label="Select currency"
+                @change="appCurrency.setCurrency($event.target.value)"
+              >
+                {% for code, rate in currency_rates_usd %}
+                  <option value="{{ code.toLowerCase() }}" {% if code.toLowerCase() == currency.toLowerCase() %}selected{% endif %}>{{ code.toUpperCase() }}</option>
+                {% endfor %}
+              </select>
+            </label>
+          {% endif %}
+          {% endif %}
+
+          {% if not global.components.navbar.hide_cart %}
+            <a href="{{ '/cart' | shopUrl }}" class="hidden lg:inline-flex items-center justify-center px-[0.6875rem] py-3 relative text-base text-accent-500 font-semibold border border-accent-500 transition-colors ease-in-out duration-150 hover:bg-accent-500/10">
+              <i class="fa fa-cart-shopping"></i>
+              <template x-if="appCart.countWithQuantities > 0">
+                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center size-[1.125rem] bg-accent-500 text-t-primary text-[0.625rem] rounded-full">
+                  <span x-text="appCart.countWithQuantities > 9 ? '9+' : appCart.countWithQuantities"></span>
+                </span>
+              </template>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

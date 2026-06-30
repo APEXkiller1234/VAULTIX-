@@ -1,0 +1,30 @@
+<section id="{{ componentId }}" class="component reveal-on-scroll" data-component-id="{{ componentId }}">
+  <div class="py-6 lg:py-8">
+    {% if properties.title %}
+      <div class="flex items-center justify-center mb-4 md:mb-6 lg:mb-8">
+        <div class="inline-block">
+          <h1 class="text-t-primary text-2xl text-center font-bold md:text-3xl lg:text-4xl">
+            {{ properties.title | renderString }}
+          </h1>
+          <hr class="w-full border-accent-500 mt-1 md:border-2 md:mt-1.5 lg:mt-2 mx-auto">
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="premium-features-grid w-full grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 {{ 'justify-center' if properties.centered }}">
+      {% for feature in properties.features %}
+        <div class="premium-feature-card reveal-on-scroll group h-full" style="--reveal-delay: {{ loop.index0 * 70 }}ms;">
+          <div class="premium-feature-card__inner text-center bg-card/75 border border-white/5 p-4 lg:p-6 h-full">
+            <i class="premium-feature-card__icon mb-2 text-accent-500 text-xl mb:mb-3 md:text-2xl lg:mb-4 lg:text-3xl {{ feature.icon }}"></i>
+            <h4 class="mb-1 text-base text-t-primary font-semibold uppercase mb:mb-1.5 lg:text-lg lg:mb-2">
+              {{ feature.title | renderString }}
+            </h4>
+            <p class="text-xs font-normal text-t-primary/80 lg:text-sm">
+              <span class="whitespace-pre-line">{{ feature.description | renderString }}</span>
+            </p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

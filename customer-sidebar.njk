@@ -1,0 +1,55 @@
+<div class="bg-card/75 border border-white/5 overflow-hidden">
+  <div class="p-4 md:p-6 lg:p-8 border-b-2 border-white/5">
+    <h3 class="text-xl font-bold text-t-primary">
+      Customer Dashboard
+    </h3>
+    <p class="text-t-primary/80 mt-2">
+      Logged in as {{ shop_customer.email }}
+    </p>
+  </div>
+  <ul class="flex flex-col gap-4 p-4 md:p-6 lg:p-8 bg-card/75">
+    <li>
+      <a href="{{ '/customer/dashboard' | shopUrl }}" class="{{ 'text-accent-500' if templateName == 'customer-dashboard' else 'text-t-primary/80 hover:text-t-primary' }}">
+        Dashboard
+      </a>
+    </li>
+    <li>
+      <a href="{{ '/customer/invoices' | shopUrl }}" class="{{ 'text-accent-500' if templateName == 'customer-invoices' else 'text-t-primary/80 hover:text-t-primary' }}">
+        Orders
+      </a>
+    </li>
+    {% if shop.tickets_enabled %}
+      <li>
+        <a href="{{ '/customer/tickets' | shopUrl }}" class="{{ 'text-accent-500' if templateName == 'customer-tickets' or templateName == 'customer-ticket' else 'text-t-primary/80 hover:text-t-primary' }}">
+          Tickets
+        </a>
+      </li>
+    {% endif %}
+    {% if shop.customer_balance_enabled %}
+      <li>
+        <a href="{{ '/customer/balance' | shopUrl }}" class="flex items-center justify-between gap-2.5 {{ 'text-accent-500' if templateName == 'customer-balance' else 'text-t-primary/80 hover:text-t-primary' }}">
+          <span>
+            Balance
+          </span>
+          <span class="text-sm">
+            <span x-text="appCurrency.format({{ shop_customer.balance }}, 'USD')">
+              {{ formatPrice(shop_customer.balance, 'USD') }}
+            </span>
+          </span>
+        </a>
+      </li>
+    {% endif %}
+    {% if shop.affiliate_enabled %}
+      <li>
+        <a href="{{ '/customer/affiliate' | shopUrl }}" class="{{ 'text-accent-500' if templateName == 'customer-affiliate' else 'text-t-primary/80 hover:text-t-primary' }}">
+          Affiliate
+        </a>
+      </li>
+    {% endif %}
+    <li>
+      <button type="button" @click="appCustomer.logout()" class="w-full text-left text-t-primary/80 hover:text-t-primary">
+        Logout
+      </button>
+    </li>
+  </ul>
+</div>

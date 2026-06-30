@@ -1,0 +1,11 @@
+<a href="{{ ('/product/' + product.path) | shopUrl }}" class="flex justify-between items-center gap-2 bg-card/75 border border-white/5 text-t-primary p-4 lg:p-6">
+  <h2 class="text-base font-semibold truncate md:text-lg">{{ product.name }}</h2>
+  <div class="flex items-center gap-4 status" data-color="{{ product.status_color }}" data-label="{{ product.status_text }}">
+    <div class="relative size-4 rounded-full" style="background-color: {{ product.status_color }}">
+      <div class="pulsating" style="background-color: {{ product.status_color }}"></div>
+    </div>
+    <span class="text-sm text-t-primary/80 font-bold md:text-base" style="color: {{ product.status_color }}">
+      {{ product.status_text }}
+    </span>
+  </div>
+</a>

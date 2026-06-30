@@ -1,0 +1,28 @@
+<div class="relative flex justify-center items-center min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] lg:min-h-[calc(100vh-4rem)]">
+  <div class="container relative flex flex-col items-center justify-center px-4 text-center">
+    <div class="mb-8 flex justify-center">
+      <div class="p-6 rounded-full bg-white/5 border border-white/5">
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-16 text-accent-500" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M10.825 22q-.675 0-1.162-.45t-.588-1.1L8.85 18.8q-.325-.125-.612-.3t-.563-.375l-1.55.65q-.625.275-1.25.05t-.975-.8l-1.175-2.05q-.35-.575-.2-1.225t.675-1.075l1.325-1Q4.5 12.5 4.5 12.337v-.675q0-.162.025-.337l-1.325-1Q2.675 9.9 2.525 9.25t.2-1.225L3.9 5.975q.35-.575.975-.8t1.25.05l1.55.65q.275-.2.575-.375t.6-.3l.225-1.65q.1-.65.588-1.1T10.825 2h2.35q.675 0 1.163.45t.587 1.1l.225 1.65q.325.125.613.3t.562.375l1.55-.65q.625-.275 1.25-.05t.975.8l1.175 2.05q.35.575.2 1.225t-.675 1.075l-1.325 1q.025.175.025.338v.674q0 .163-.05.338l1.325 1q.525.425.675 1.075t-.2 1.225l-1.2 2.05q-.35.575-.975.8t-1.25-.05l-1.5-.65q-.275.2-.575.375t-.6.3l-.225 1.65q-.1.65-.587 1.1t-1.163.45zm1.225-6.5q1.45 0 2.475-1.025T15.55 12t-1.025-2.475T12.05 8.5q-1.475 0-2.488 1.025T8.55 12t1.013 2.475T12.05 15.5"/></svg>
+      </div>
+    </div>
+    <h1 class="mb-4 text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+      We're Under <span class="text-accent-500">Maintenance</span>
+    </h1>
+    <p class="mb-8 text-sm md:text-base lg:text-lg text-gray-300 leading-relaxed">
+      Our team is working hard to improve your experience.
+      <br class="hidden md:block">
+      We'll be back online shortly with exciting updates.
+    </p>
+    <div class="flex justify-center">
+      <button 
+        @click="appMaintenance.modalOpen()"
+        class="inline-flex items-center gap-4 border px-6 py-2 text-sm font-semibold transition-colors ease-in-out duration-150 text-accent-500 border-accent-500 hover:bg-accent-500/10"
+      >
+        Admin Access
+        <i class="fa fa-right-to-bracket"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% render_snippet "maintenance-login-modal.njk" %}

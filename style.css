@@ -1,0 +1,399 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --altcha-border-width: 1px;
+  --altcha-border-radius: 0px;
+  --altcha-color-base: rgba(255, 255, 255, 0.025);
+  --altcha-color-border: rgba(255, 255, 255, 0.05);
+  --altcha-color-text: #fff;
+  --altcha-color-border-focus: currentColor;
+  --altcha-color-error-text: #ef4444;
+  --altcha-color-footer-bg: #f4f4f4;
+  --altcha-max-width: 460px;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Galactic: same pulse behaviour, now with a soft starlight glow */
+.pulsating {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 18px rgba(var(--cl-accent), 0.35);
+  animation: pulsating 1.25s linear infinite;
+}
+
+@keyframes pulsating {
+  0% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.aspect-product-card-image {
+  aspect-ratio: var(--product-card-image-aspect-ratio);
+}
+
+.aspect-product-page-image {
+  aspect-ratio: var(--product-page-image-aspect-ratio);
+}
+
+.aspect-group-card-image {
+  aspect-ratio: var(--group-card-image-aspect-ratio);
+}
+
+.aspect-blog-card-image {
+  aspect-ratio: var(--blog-card-image-aspect-ratio);
+}
+
+.object-product-image {
+  object-fit: var(--product-image-fit);
+}
+
+.object-group-image {
+  object-fit: var(--group-image-fit);
+}
+
+#snow {
+  @apply fixed inset-0 w-screen h-screen overflow-hidden pointer-events-none z-[9999];
+}
+
+#snow .snowflake {
+  @apply absolute size-[10px] -mt-[10px] rounded-full;
+  background: rgba(var(--cl-snow, 226, 232, 255), 1);
+}
+
+.currency-selector.xs .choices.is-open  {
+  @apply !ring-0;
+}
+
+.currency-selector.xs .choices__inner {
+  @apply !h-[40px] !min-h-0 !rounded-none !bg-transparent !border !border-white/5 !pt-1 !pb-0;
+}
+
+.currency-selector.lg .choices.is-open {
+  @apply !ring-0;
+}
+
+.currency-selector.lg .choices__inner {
+  @apply !min-w-[5rem] !h-[44px] !rounded-none !bg-transparent !border !border-white/5;
+}
+
+.currency-selector.lg .choices.is-open .choices__inner {
+  @apply !border-accent-500;
+}
+
+.currency-selector .choices__inner .symbol {
+  @apply bg-transparent text-t-primary font-semibold min-w-0;
+}
+
+.currency-selector .choices__inner .code,
+.currency-selector .choices__inner .default {
+  @apply hidden;
+}
+
+.currency-selector .choices__inner .choices__item {
+  @apply max-w-[50px] overflow-hidden whitespace-nowrap text-clip;
+}
+
+.currency-selector .choices__list.choices__list--dropdown {
+  @apply !min-w-[11rem] ml-[-5.75rem] mt-[0.5rem] rounded-none;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.currency-selector .choices__list::-webkit-scrollbar {
+  @apply hidden;
+}
+
+.currency-selector .choices__list--dropdown .choices__item--selectable {
+  @apply !pr-2.5;
+}
+
+.currency-selector .choices__list--dropdown .choices__item--selectable.is-highlighted::after {
+  @apply hidden;
+}
+
+.editor .rtl {
+  direction: rtl;
+}
+
+.editor .e-paragraph {
+  position: relative;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  word-wrap: break-word;
+}
+
+.editor .e-quote {
+  font-size: 1rem;
+  padding-left: 1rem;
+  border-left-color: rgb(var(--cl-accent));
+  border-left-width: 0.25rem;
+  border-left-style: solid;
+}
+
+.editor .e-hr, .editor hr {
+  border-top: 1px solid rgb(var(--cl-accent));
+  margin: 0.5rem 0;
+}
+
+.editor .e-heading-h1 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+.editor .e-heading-h2 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.editor .e-heading-h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.editor .e-nested-listitem {
+  list-style-type: none;
+}
+
+.editor .e-list-ol {
+  padding: 0;
+  margin: 0;
+  margin-left: 1rem;
+  list-style-type: decimal;
+}
+
+.editor .e-list-ul {
+  padding: 0;
+  margin: 0;
+  margin-left: 1rem;
+  list-style-type: disc;
+}
+
+.editor .e-listitem {
+  margin: 0.5rem 1rem 0.5rem 1rem;
+}
+
+.editor .e-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.editor .e-youtube iframe {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.editor .e-link {
+  color: rgb(var(--cl-accent));
+  text-decoration: underline;
+}
+
+.editor .e-text-bold {
+  font-weight: bold;
+}
+
+.editor .e-text-code {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.0625rem 0.25rem;
+  font-family: monospace;
+  font-size: 95%;
+}
+
+.editor .e-text-italic {
+  font-style: italic;
+}
+
+.editor .e-text-strikethrough {
+  text-decoration: line-through;
+}
+
+.editor .e-text-underline {
+  text-decoration: underline;
+}
+
+.editor .e-text-underlineStrikethrough {
+  text-decoration: underline line-through;
+}
+
+.editor .e-code {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  font-family: monospace;
+  border-radius: .5rem;
+}
+
+.editor .e-collapsible {
+  margin: 0.25rem 0 0.25rem 0;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+.editor .e-collapsible-title {
+  display: block;
+  position: relative;
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  font-weight: 600;
+}
+
+.editor .e-collapsible-title::marker,
+.editor .e-collapsible-title::-webkit-details-marker {
+  display: none;
+}
+
+.editor .e-collapsible-title:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 0.625rem;
+  transform: translateY(-50%);
+  border: 1px solid transparent;
+  border-left-color: rgb(var(--cl-accent));
+  border-width: 4px 6px 4px 6px;
+}
+
+.editor .e-collapsible[open] > .editor .e-collapsible-title:before {
+  border-left-color: transparent;
+  border-top-color: rgb(var(--cl-accent));
+  border-width: 6px 4px 0 4px;
+}
+
+.editor .e-collapsible-content {
+  padding: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.choices {
+  @apply !mb-0;
+}
+
+.choices.is-open {
+  @apply rounded-b-none ring-accent-500 ring-2 ring-opacity-50;
+}
+
+.choices .choices__inner {
+  @apply min-h-10 text-base bg-white/[0.025] text-t-primary py-2 px-4 w-full border-0;
+}
+
+.choices[data-type*="select-one"] .choices__inner {
+  @apply py-2 px-4;
+}
+
+.choices[data-type*="select-one"]::after {
+  border-color: rgba(var(--cl-t-primary), 0.25) transparent transparent;
+}
+
+.choices[data-type*="select-one"].is-open::after {
+  border-color: transparent transparent rgba(var(--cl-t-primary), 0.25);
+}
+
+.choices .choices__list.choices__list--single {
+  @apply p-0;
+}
+
+.choices .choices__list.choices__list--dropdown {
+  @apply bg-background;
+}
+
+.choices.is-open .choices__list--dropdown,
+.choices.is-open .choices__list[aria-expanded] {
+  @apply border-white/10;
+}
+
+.choices[data-type*="select-one"] .choices__list .choices__input {
+  @apply border-b-white/5;
+}
+
+.choices[data-type*="select-one"] .choices__list.choices__list--dropdown  .choices__input {
+  @apply bg-white/[0.025] text-t-primary;
+}
+
+.choices .choices__list--dropdown .choices__item,
+.choices .choices__list[aria-expanded] .choices__item {
+  @apply bg-white/[0.025] text-t-primary;
+}
+
+.choices .choices__list--dropdown .choices__item--selectable.is-highlighted,
+.choices .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+  @apply bg-accent-500 text-t-primary;
+}
+
+.choices .choices[data-type*="select-one"] .choices__input {
+  @apply bg-accent-500 text-t-primary;
+}
+
+.splide.thumbnails .splide__slide.is-active {
+  @apply opacity-100;
+}
+
+.splide .splide__arrow {
+  @apply bg-accent-500/10;
+}
+
+.splide .splide__arrow svg {
+  @apply fill-accent-500;
+}
+
+body lite-youtube {
+  @apply max-w-none;
+}
+
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+.builder .component {
+  @apply relative;
+}
+
+.builder .component .builder-toolbar {
+  @apply hidden z-50;
+}
+
+.builder .component:hover .builder-toolbar {
+  @apply block;
+}
+
+.builder .announcement .builder-toolbar .actions button:not(.edit),
+.builder .navbar .builder-toolbar .actions button:not(.edit),
+.builder .footer .builder-toolbar .actions button:not(.edit) {
+  display: none;
+}
